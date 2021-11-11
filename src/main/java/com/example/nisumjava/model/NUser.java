@@ -1,32 +1,40 @@
 package com.example.nisumjava.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-//@Table(name = "users")
 public class NUser {
-
-    private int userId;
-    //@Column(name = "name", nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "userId")
+    private int id;
     private String name;
-//    @Column(name = "email", nullable = false)
     private String email;
-//    @Column(name = "password", nullable = false)
     private String password;
+    private String created;
+    private String modified;
+    private String lastLogin;
+    private String token;
+    private boolean isActive;
 
-    private List<Phone> phones;
+    @OneToMany(targetEntity = Phone.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("nuser")
+    private List<Phone> phones = new ArrayList<>();
 
     public NUser() { }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getId() {
-        return userId;
+    @JsonIgnore
+    public int getUserId() {
+        return id;
     }
 
-    public void setId(int id) {
-        this.userId = id;
+    public void setUserId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -52,7 +60,7 @@ public class NUser {
     public void setPassword(String password) {
         this.password = password;
     }
-    @OneToMany(targetEntity = Phone.class, fetch = FetchType.EAGER)
+
     public List<Phone> getPhones() {
         return phones;
     }
@@ -60,57 +68,48 @@ public class NUser {
     public void setPhones(List<Phone> phones) {
         this.phones = phones;
     }
-}
 
-@Entity
-class Phone {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private int number;
-    private int cityCode;
-    private int countryCode;
-    @ManyToOne
-//    @JoinColumn(name = "userId")
-    private NUser user;
-
-    public int getId() {
-        return id;
+    @JsonIgnore
+    public String getCreated() {
+        return created;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCreated(String created) {
+        this.created = created;
     }
 
-    public int getNumber() {
-        return number;
+    @JsonIgnore
+    public String getModified() {
+        return modified;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setModified(String modified) {
+        this.modified = modified;
     }
 
-    public int getCityCode() {
-        return cityCode;
+    @JsonIgnore
+    public String getLastLogin() {
+        return lastLogin;
     }
 
-    public void setCityCode(int cityCode) {
-        this.cityCode = cityCode;
+    public void setLastLogin(String lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
-    public int getCountryCode() {
-        return countryCode;
+    public String getToken() {
+        return token;
     }
 
-    public void setCountryCode(int countryCode) {
-        this.countryCode = countryCode;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public NUser getUser() {
-        return user;
+    @JsonIgnore
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setUser(NUser user) {
-        this.user = user;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
