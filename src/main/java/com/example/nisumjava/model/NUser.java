@@ -6,20 +6,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class NUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "userId")
-    private int id;
+    private UUID id;
     private String name;
     private String email;
     private String password;
     private String created;
     private String modified;
     private String lastLogin;
-    private String token;
+    private UUID token;
     private boolean isActive;
 
     @OneToMany(targetEntity = Phone.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -28,12 +29,11 @@ public class NUser {
 
     public NUser() { }
 
-    @JsonIgnore
-    public int getUserId() {
+    public UUID getUserId() {
         return id;
     }
 
-    public void setUserId(int id) {
+    public void setUserId(UUID id) {
         this.id = id;
     }
 
@@ -69,7 +69,6 @@ public class NUser {
         this.phones = phones;
     }
 
-    @JsonIgnore
     public String getCreated() {
         return created;
     }
@@ -78,7 +77,6 @@ public class NUser {
         this.created = created;
     }
 
-    @JsonIgnore
     public String getModified() {
         return modified;
     }
@@ -87,7 +85,6 @@ public class NUser {
         this.modified = modified;
     }
 
-    @JsonIgnore
     public String getLastLogin() {
         return lastLogin;
     }
@@ -96,15 +93,14 @@ public class NUser {
         this.lastLogin = lastLogin;
     }
 
-    public String getToken() {
+    public UUID getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(UUID token) {
         this.token = token;
     }
 
-    @JsonIgnore
     public boolean isActive() {
         return isActive;
     }
