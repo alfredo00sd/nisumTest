@@ -1,5 +1,6 @@
 package com.example.nisumjava.controller;
 
+import com.example.nisumjava.exceptions.ResourceNotFoundException;
 import com.example.nisumjava.model.NUser;
 import com.example.nisumjava.repository.NUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class NUserController {
     @Autowired
     private NUserRepository repository;
 
+    @GetMapping("/")
+    public void index() throws ResourceNotFoundException {
+        throw new ResourceNotFoundException("Not available services here...");
+    }
+
     @GetMapping("/users")
     public List<NUser> getAllUsers() {
         return repository.findAll();
@@ -27,7 +33,7 @@ public class NUserController {
     @PostMapping("/users")
     public ResponseEntity<NUser> createUser(@RequestBody NUser user) throws Exception {
 
-        //Input validation.
+        //Input validations.
         if(!validUserMail(user.getEmail())) {
             throw new Exception("Correo "+user.getEmail()+" invalido, favor revisar e intentar de nuevo.");
         }
@@ -36,7 +42,7 @@ public class NUserController {
             throw new Exception("El correo ya esta registrado");
         }
 
-        if(validPassword(user.getPassword())) {
+        if(!validPassword(user.getPassword())) {
             throw new Exception("Your password must contain at least 1 capital letter and 2 numbers");
         }
 
@@ -62,17 +68,14 @@ public class NUserController {
     }
 
     private boolean validUserMail(String email) {
-
         Pattern pattern = Pattern.compile("^(.+)@(.+)$");
         Matcher matcher = pattern.matcher(email);
-
         return matcher.matches();
     }
 
     private boolean validPassword(String pass) {
-        Pattern pattern = Pattern.compile("^(.+)@(.+)$");
-
+        Pattern pattern = Pattern.compile("^((?=.*[0-9]{2,}))(?=.*[A-Z])(?=.*[a-z]).{5,15}$");
         Matcher matcher = pattern.matcher(pass);
-        return true;
+        return matcher.matches();
     }
 }
